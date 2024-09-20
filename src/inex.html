@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bouncing Balls</title>
+    <title>Bouncing Words</title>
     <style>
         * {
             margin: 0;
@@ -28,12 +28,10 @@
             overflow: hidden;
         }
 
-        .ball {
+        .word {
             position: absolute;
-            width: 20px;
-            height: 20px;
-            background-color: red;
-            border-radius: 50%;
+            font-size: 20px;
+            color: white;
         }
 
         .controls {
@@ -60,60 +58,69 @@
 <div class="box" id="box"></div>
 
 <div class="controls">
-    <button onclick="addBall()">Add Ball</button>
+    <button onclick="addWord()">Add Word</button>
 </div>
 
 <script>
     const box = document.getElementById('box');
-    const balls = [];
+    const words = [];
+    const wordList = ["skibidi toilet","Distracted Boyfriend", "Drake Hotline Bling", "Expanding Brain", "Two Buttons", "Mocking SpongeBob",
+        "Change My Mind", "Woman Yelling at a Cat", "Is This a Pigeon?", "Success Kid", "Grumpy Cat",
+        "Doge", "This Is Fine", "Surprised Pikachu", "Roll Safe", "One Does Not Simply",
+        "Bad Luck Brian", "Hide the Pain Harold", "Pepe the Frog", "Arthur's Fist", "Overly Attached Girlfriend",
+        "Philosoraptor", "Futurama Fry", "Y U No", "Ermahgerd", "Condescending Wonka",
+        "Triggered", "Shut Up and Take My Money", "Forever Alone", "Facepalm", "First World Problems",
+        "Me Explaining", "They Don't Know", "Sweating Jordan Peele", "Always Has Been", "What If I Told You",
+        "Crying Jordan", "He Protec But He Attac", "You vs. The Guy She Told You Not to Worry About", "Ain't Nobody Got Time for That", "How Do You Do, Fellow Kids?",
+        "It's Over 9000", "Confused Math Lady", "Weird Flex But OK", "Big Brain Time", "Surprised Pikachu",
+        "Is Mayonnaise an Instrument?", "Ight Imma Head Out", "Am I a Joke to You?", "Disaster Girl", "Epic Fail"
+    ];
 
     function getRandomVelocity() {
         return (Math.random() * 4) + 1;  // Random velocity between 1 and 5
     }
 
-    function addBall() {
-        const ball = document.createElement('div');
-        ball.classList.add('ball');
-        box.appendChild(ball);
+    function getRandomWord() {
+        return wordList[Math.floor(Math.random() * wordList.length)];
+    }
 
-        const ballObj = {
-            element: ball,
+    function addWord() {
+        const word = document.createElement('div');
+        word.classList.add('word');
+        word.textContent = getRandomWord();
+        box.appendChild(word);
+
+        const wordObj = {
+            element: word,
             x: Math.random() * (box.clientWidth - 20), // Random position inside box
             y: Math.random() * (box.clientHeight - 20),
             vx: getRandomVelocity(),  // Random x velocity
             vy: getRandomVelocity()   // Random y velocity
         };
 
-        balls.push(ballObj);
+        words.push(wordObj);
     }
 
-    function moveBalls() {
-        balls.forEach(ball => {
-            ball.x += ball.vx;
-            ball.y += ball.vy;
+    function moveWords() {
+        words.forEach(word => {
+            word.x += word.vx;
+            word.y += word.vy;
 
             // Check for collision with the walls
-            if (ball.x <= 0 || ball.x >= (box.clientWidth - 20)) {
-                ball.vx *= -1;  // Reverse direction when hitting vertical walls
+            if (word.x <= 0 || word.x >= (box.clientWidth - word.element.clientWidth)) {
+                word.vx *= -1;  // Reverse direction when hitting vertical walls
             }
 
-            if (ball.y <= 0 || ball.y >= (box.clientHeight - 20)) {
-                ball.vy *= -1;  // Reverse direction when hitting horizontal walls
+            if (word.y <= 0 || word.y >= (box.clientHeight - word.element.clientHeight)) {
+                word.vy *= -1;  // Reverse direction when hitting horizontal walls
             }
 
-            ball.element.style.left = `${ball.x}px`;
-            ball.element.style.top = `${ball.y}px`;
+            word.element.style.left = `${word.x}px`;
+            word.element.style.top = `${word.y}px`;
         });
     }
 
-    setInterval(moveBalls, 20);  // Move balls every 20 milliseconds
-</script>
-<script>
-    var c = document.getElementById("myCanvas");
-    var ctx = c.getContext("2d");
-    ctx.beginPath();
-    ctx.arc(95, 50, 40, 0, 2 * Math.PI);
-    ctx.stroke();
+    setInterval(moveWords, 20);  // Move words every 20 milliseconds
 </script>
 </body>
 </html>
