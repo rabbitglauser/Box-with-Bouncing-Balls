@@ -2,9 +2,118 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bouncing Balls</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f8f9fa;
+        }
+
+        .box {
+            position: relative;
+            width: 600px;
+            height: 400px;
+            background-color: #007bff;
+            border: 2px solid #000;
+            overflow: hidden;
+        }
+
+        .ball {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background-color: red;
+            border-radius: 50%;
+        }
+
+        .controls {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #218838;
+        }
+    </style>
 </head>
 <body>
+<div class="box" id="box"></div>
 
+<div class="controls">
+    <button onclick="addBall()">Add Ball</button>
+</div>
+
+<script>
+    const box = document.getElementById('box');
+    const balls = [];
+
+    function getRandomVelocity() {
+        return (Math.random() * 4) + 1;  // Random velocity between 1 and 5
+    }
+
+    function addBall() {
+        const ball = document.createElement('div');
+        ball.classList.add('ball');
+        box.appendChild(ball);
+
+        const ballObj = {
+            element: ball,
+            x: Math.random() * (box.clientWidth - 20), // Random position inside box
+            y: Math.random() * (box.clientHeight - 20),
+            vx: getRandomVelocity(),  // Random x velocity
+            vy: getRandomVelocity()   // Random y velocity
+        };
+
+        balls.push(ballObj);
+    }
+
+    function moveBalls() {
+        balls.forEach(ball => {
+            ball.x += ball.vx;
+            ball.y += ball.vy;
+
+            // Check for collision with the walls
+            if (ball.x <= 0 || ball.x >= (box.clientWidth - 20)) {
+                ball.vx *= -1;  // Reverse direction when hitting vertical walls
+            }
+
+            if (ball.y <= 0 || ball.y >= (box.clientHeight - 20)) {
+                ball.vy *= -1;  // Reverse direction when hitting horizontal walls
+            }
+
+            ball.element.style.left = `${ball.x}px`;
+            ball.element.style.top = `${ball.y}px`;
+        });
+    }
+
+    setInterval(moveBalls, 20);  // Move balls every 20 milliseconds
+</script>
+<script>
+    var c = document.getElementById("myCanvas");
+    var ctx = c.getContext("2d");
+    ctx.beginPath();
+    ctx.arc(95, 50, 40, 0, 2 * Math.PI);
+    ctx.stroke();
+</script>
 </body>
 </html>
